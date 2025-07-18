@@ -1,19 +1,38 @@
 
 const mongoose = require('mongoose');
-// const mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');
+const dotenv = require("dotenv");
+
+dotenv.config();
 
 const connectMongo = async () => {
-  return mongoose.connect(process.env.MONGO_URI);
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log('✅ MongoDB connected successfully');
+  } catch (error) {
+    console.error('❌ MongoDB Connection Failed:', err.message);
+  }
 };
 
-// const connectMySQL = async () => {
-//   return mysql.createConnection({
-//     host: 'localhost',
-//     user: 'root',
-//     password: '',
-//     database: 'lawyer_booking'
-//   });
-// };
+const connectMySQL = async () => {
+  try {
+    await mysql.createConnection({
+    host: process.env.MYSQL_HOST,
+    user: process.env.MYSQL_USER,
+    password: process.env.MYSQL_PASSWORD,
+    database: process.env.MYSQL_DATABASE
+   });
+   console.log('✅ MySQL connected successfully');
+  } catch (error) {
+    console.error('❌ MySQL Connection Failed:', err.message);
+  }
+  // return mysql.createConnection({
+  //   host: process.env.MYSQL_HOST,
+  //   user: process.env.MYSQL_USER,
+  //   password: process.env.MYSQL_PASSWORD,
+  //   database: process.env.MYSQL_DATABASE
+  // });
+};
 
-// module.exports = { connectMongo, connectMySQL };
-module.exports = { connectMongo};
+module.exports = { connectMongo, connectMySQL };
+// module.exports = { connectMongo};
